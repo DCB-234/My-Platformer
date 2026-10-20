@@ -1,0 +1,6 @@
+class Button:
+    def __init__(self):
+        ...
+
+    def is_hovering(self) -> bool:
+        ...
