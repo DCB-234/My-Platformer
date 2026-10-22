@@ -80,9 +80,13 @@ class World():
 
     def is_valid_block_placement(self, coord: tuple, player_rect) -> bool:
 
-        # Check if spot is already occupied by block
         ix, iy = coord
         block = self.get_block(coord)
+
+        if block is None:
+            return False
+
+        # Check if spot is already occupied by block
         if block.definition.is_solid_cube:
             return False
 
