@@ -63,9 +63,7 @@ class Inventory:
         else:
             slot.stack_size = remaining_amount
 
-    def create_new_stack(
-        self, stack_size: int, item_type: ItemType, slot_index: int
-    ) -> None:
+    def create_new_stack(self, stack_size: int, item_type: ItemType, slot_index: int) -> None:
         self.slots[slot_index] = ItemStack(
             stack_size=stack_size, item_type=item_type
         )
