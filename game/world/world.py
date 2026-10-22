@@ -41,11 +41,17 @@ class World():
 
     def insert_block(self, block_type: BlockType, pos: tuple) -> None:
         chunk = self.get_chunk(self.world_to_chunk_pos(pos))
+        if Chunk is None:
+            return
+
         relative_coord = self.world_to_local_chunk_coord(pos)
         chunk.insert_block(block_type, relative_coord)
 
     def break_block(self, pos: tuple) -> None:
         chunk = self.get_chunk(self.world_to_chunk_pos(pos))
+        if Chunk is None:
+            return
+        
         relative_coord = self.world_to_local_chunk_coord(pos)
         chunk.break_block(relative_coord)
 
