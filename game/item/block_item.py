@@ -13,3 +13,4 @@ class BlockItem(ItemDefinition):
         coord = world.get_coord_from_click(mouse_world)
         if world.is_valid_block_placement(coord, entity_player.hitbox):
             world.insert_block(self.block_type, coord)
+            super().on_item_use(item_stack, world, entity_player)
