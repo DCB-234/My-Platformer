@@ -10,7 +10,7 @@ All textures belong to the creators of Minecraft.
 - Physics
 - Breaking and placing blocks
 - Entities
-- Random ticking (At the moment, only used for grass spreading)
+- Random ticking
 
 ## Controls
 | Control                       | Action |
