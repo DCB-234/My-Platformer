@@ -1,3 +1,5 @@
+![Demo GIF](images/IMG_2660.gif)
+
 A 2D Minecraft-like inspired game developed using Python/Pygame. Created as an independent learning project!
 
 ## Current Features
