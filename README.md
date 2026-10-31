@@ -1,16 +1,14 @@
-Simple learning project creating a 2D Minecraft clone implemented using python/pygame.
+A 2D Minecraft-like inspired game developed using Python/Pygame. Created as an independent learning project!
 
-All textures belong to the creators of Minecraft.
-
-## Current Features:
-- Chunking
-- Procedural world generation
-- Caves
-- Inventory system
-- Physics
+## Current Features
+- Chunk-based world loading
+- Procedural terrain generation
+- Procedurally generated caves
+- Inventory and hotbar system
+- Player physics and movement
 - Breaking and placing blocks
-- Entities
-- Random ticking
+- Entity system
+- Random block ticking
 
 ## Controls
 | Control                       | Action |
@@ -19,6 +17,11 @@ All textures belong to the creators of Minecraft.
 | Right mouse                   | Place block |
 | Arrow keys or WASD            | Move/Jump |
 | Space | Jump                  |
-| Left shift                    | Crouch (crouching animation still needs to be implemented) |
+| Left shift                    | Crouch |
 | 0-9                           | Select item in hotbar |
 | e                             | Open/close inventory |
+
+*(Note: Crouching is functional but the animation has not yet been implemented)*
+
+# Assets
+Textures are derived from Minecraft. All original assets belong to their respective creators.
