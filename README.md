@@ -2,7 +2,7 @@
 
 A 2D Minecraft-like inspired game developed using Python/Pygame. Created as an independent learning project!
 
-## Current Features
+# Current Features
 - Chunk-based world loading
 - Procedural terrain generation
 - Procedurally generated caves
@@ -12,7 +12,7 @@ A 2D Minecraft-like inspired game developed using Python/Pygame. Created as an i
 - Entity system
 - Random block ticking
 
-## Controls
+# Controls
 | Control                       | Action |
 |-------------------------------|----------------------------------------------------------------|
 | Left mouse                    | Break block |
