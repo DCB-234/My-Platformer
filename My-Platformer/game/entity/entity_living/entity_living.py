@@ -1,8 +1,14 @@
 from game.entity.entity import Entity
 
 class EntityLiving(Entity):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, hitbox, start_x:int=0, start_y:int=0, start_speed_x:int=0, start_speed_y:int=0):
+        super().__init__(
+            hitbox=hitbox,
+            start_x=start_x,
+            start_y=start_y,
+            start_speed_x=start_speed_x,
+            start_speed_y=start_speed_y
+        )
 
         self.walk_time: int = 0
         self.walk_progress: float = 0.0
@@ -13,7 +19,8 @@ class EntityLiving(Entity):
         self.prev_walk_progress: float = 0.0
         self.interp_walk_progress: float = 0.0
 
-    def tick_update(self) -> None:
+    def tick_update(self, world, game_rules) -> None:
+        super().tick_update(world, game_rules)
         self.update_walk_progress()
     
     def update_walk_progress(self) -> None:
@@ -27,9 +34,6 @@ class EntityLiving(Entity):
 
         self.prev_walk_progress = self.walk_progress
         self.walk_progress = self.walk_time / self.max_walk_time
-
-    def update_physics(self) -> None:
-        self.hitbox.midbottom = (self.position.x, self.position.y)
 
     def interpolate_entity(self, partial_tick) -> None:
         super().interpolate_entity(partial_tick)

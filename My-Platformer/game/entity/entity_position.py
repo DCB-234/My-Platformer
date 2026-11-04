@@ -1,10 +1,11 @@
 from dataclasses import dataclass
+import pygame
 
-@dataclass
 class EntityPosition:
-    prev_x: int = 0
-    prev_y: int = 0
-    x: int = 0
-    y: int = 0
-    interp_x: float = 0.0
-    interp_y: float = 0.0
+    def __init__(self, start_x:int=0, start_y:int=0, start_speed_x:int=0, start_speed_y:int=0):
+        self.prev = pygame.Vector2(start_x, start_y)
+        self.pos = pygame.Vector2(start_x, start_y)
+        self.interp = pygame.Vector2(start_x, start_y)
+        self.speed = pygame.Vector2(start_speed_x, start_speed_y)
+        self.direction: int = -1
+        self.is_in_air: bool = False

@@ -11,12 +11,13 @@ from game.entity.entity_living.entity_living import EntityLiving
 
 class EntityPlayer(EntityLiving):
     def __init__(self):
-        super().__init__()
-        self.speed_y: int = 0
-        self.speed_x: int = 0
+        super().__init__(
+            hitbox=pygame.Rect(0, 0, 8, 64),
+            start_x=0,
+            start_y=0,
+        )
+
         self.terminal_velocity: int = 50
-        self.direction: int = -1
-        self.is_in_air: bool = False
         self.is_crouching: bool = False
         self.head_angle: float = 0
 
@@ -26,9 +27,6 @@ class EntityPlayer(EntityLiving):
 
         self.prev_swing_progress: float = 0.0
         self.interp_swing_progress: float = 0.0
-
-        self.hitbox = pygame.Rect(0, 0, 8, 64)
-        self.hitbox.midbottom = (self.position.x, self.position.y)
 
         self.current_hotbar_slot: int = 0
 
@@ -58,26 +56,28 @@ class EntityPlayer(EntityLiving):
         steve_skin = steve.subsurface(steve_crop)
         self.skin = SkinBase(steve_skin)
 
+        self.update_physics()
+
     def move(self, value: int) -> None:
         if self.is_crouching:
             min_x, max_x = -3, 3
         else:
             min_x, max_x = -6, 6
 
-        new_speed_x = self.speed_x + value
+        new_speed_x = self.position.speed.x + value
         if new_speed_x < min_x or new_speed_x > max_x:
             return
 
-        self.speed_x = new_speed_x
+        self.position.speed.x = new_speed_x
 
     def jump(self) -> None:
-        if not self.is_in_air:
-            self.is_in_air = True
-            self.speed_y = 14
+        if not self.position.is_in_air:
+            self.position.is_in_air = True
+            self.position.speed.y = 14
 
     def draw(self, screen, position) -> None:
         centerx, y = position
-        facing = self.direction
+        facing = self.position.direction
         back_side = -facing
 
         if self.is_walking:
@@ -121,7 +121,6 @@ class EntityPlayer(EntityLiving):
         self.skin.draw_arm(screen, facing, facing, (centerx,y-48), front_arm_angle)
 
     def update_physics(self) -> None:
-        super().update_physics()
         if self.is_crouching:
             self.hitbox.height = 48
             self.max_walk_time = 25
@@ -130,22 +129,53 @@ class EntityPlayer(EntityLiving):
             self.hitbox.height = 60
             self.max_walk_time = 15
             self.max_walk_progress = 45
+        super().update_physics()
 
-    def tick_update(self, mouse_world) -> None:
-        super().tick_update()
+    def tick_update(self, world, game_rules, mouse_world) -> None:
+        self.update_walk_progress()
         self.update_arm_swing_progress()
         self.update_head(mouse_world)
 
+        # Apply physics
+        self.position.prev.x = self.position.pos.x
+        self.position.prev.y = self.position.pos.y
+
+        super().apply_vertical_physics(world, game_rules)
+        self.apply_horizontal_physics(world, game_rules)
+
+    def apply_horizontal_physics(self, world, game_rules) -> None:
+        # Apply horizontal movement
+        if not self.is_walking or (self.is_crouching and (self.position.speed.x < -3 or self.position.speed.x > 3)):
+            self.position.speed.x += super().determine_friction()
+
+        self.position.pos.x += self.position.speed.x
+        self.update_physics()
+
+        # Resolve horizontal collisions
+        collisions = world.get_collisions(self.hitbox)
+
+        if collisions:
+            if self.position.speed.x > 0:
+                obstacle = min(collisions, key=lambda rect: rect.left)
+                self.hitbox.right = obstacle.left
+
+            elif self.position.speed.x < 0:
+                obstacle = max(collisions, key=lambda rect: rect.right)
+                self.hitbox.left = obstacle.right
+
+            self.position.pos.x = self.hitbox.centerx
+            self.position.speed.x = 0
+
     def update_head(self, mouse_world) -> None:
         mouse_x, _ = mouse_world
-        if mouse_x < self.position.x:
-            self.direction = -1
-        elif mouse_x > self.position.x:
-            self.direction = 1
+        if mouse_x < self.position.pos.x:
+            self.position.direction = -1
+        elif mouse_x > self.position.pos.x:
+            self.position.direction = 1
 
-        centerx, y = self.position.x, self.position.y
+        centerx, y = self.position.pos.x, self.position.pos.y
         head_pos = (centerx, y - 56)
-        p1, p2 = (mouse_world, head_pos) if self.direction == 1 else (head_pos, mouse_world)
+        p1, p2 = (mouse_world, head_pos) if self.position.direction == 1 else (head_pos, mouse_world)
         self.head_angle = self.find_angle(p1, p2)
 
     def update_arm_swing_progress(self) -> None:

@@ -10,8 +10,8 @@ class Camera:
     def update(self, player, screen, dt) -> None:
         factor = 1 - math.exp(-self.SMOOTHING + dt)
 
-        target_x = player.position.x - screen.get_width() / 2
-        target_y = player.position.y - screen.get_height() / 2
+        target_x = player.position.pos.x - screen.get_width() / 2
+        target_y = player.position.pos.y - screen.get_height() / 2
 
         self.x += (target_x - self.x) * factor
         self.y += (target_y - self.y) * factor

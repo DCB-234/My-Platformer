@@ -46,7 +46,7 @@ class GameRenderer:
             self.draw_chunk(chunk_pos, chunk)
 
         # Player
-        position = self.camera.world_to_screen((player.position.x, player.position.y))
+        position = self.camera.world_to_screen((player.position.pos.x, player.position.pos.y))
         player.draw(self.screen, position)
 
         # Container or hotbar
@@ -60,10 +60,10 @@ class GameRenderer:
         self.screen.blit(fps_text, (screen_width-80, 5))
 
         # Player coordinates
-        player_x = self.DEFAULT_FONT.render(f'X {player.position.x // 32}', True, 'White')
+        player_x = self.DEFAULT_FONT.render(f'X {player.position.pos.x // 32}', True, 'White')
         self.screen.blit(player_x, (10, 10))
 
-        player_y = self.DEFAULT_FONT.render(f'Y {player.position.y // 32}', True, 'White')
+        player_y = self.DEFAULT_FONT.render(f'Y {player.position.pos.y // 32}', True, 'White')
         self.screen.blit(player_y, (10, 30))
 
         # Mouse cursor

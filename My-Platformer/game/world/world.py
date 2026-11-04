@@ -4,7 +4,6 @@ from game.block.block import Block
 from game.world.block_context import BlockContext
 from game.world.chunks.chunk import Chunk
 from game.world.chunks.chunk_manager import ChunkManager
-from game.entity.entity_manager import EntityManager
 import pygame
 import random
 
@@ -13,7 +12,6 @@ class World():
         self.MAX_WORLD_HEIGHT =  256
         self.MIN_WORLD_HEIGHT = -256
         self.chunk_manager = ChunkManager(self, world_seed)
-        self.entity_manager = EntityManager(self)
 
     def get_chunk(self, chunk_pos) -> Chunk | None:
         return self.chunk_manager.get_chunk(chunk_pos)
@@ -133,3 +131,12 @@ class World():
                 collisions.append(block_rect)
 
         return collisions
+
+    def update_chunks(self, player_chunk, render_distance) -> None:
+        self.chunk_manager.update_chunks(player_chunk, render_distance)
+
+    def tick_chunks(self, game_rules) -> None:
+        self.chunk_manager.tick(self, game_rules)
+
+    def spawn_entity(self, entity) -> None:
+        self.chunk_manager.spawn_entity(entity)

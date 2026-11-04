@@ -8,7 +8,7 @@ pygame.init()
 screen = pygame.display.set_mode((640, 480), pygame.RESIZABLE)
 clock = pygame.time.Clock()
 
-world_seed = 7396
+world_seed = 6129
 
 camera = Camera()
 world = World(world_seed)

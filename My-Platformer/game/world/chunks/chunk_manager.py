@@ -64,3 +64,20 @@ class ChunkManager:
             x * 16,
             y * 16
         )
+
+    def tick(self, world, game_rules) -> None:
+        for chunk in self.chunks.values():
+            chunk.tick(world, game_rules)
+
+    def transfer_entity(self, entity) -> None:
+        new_chunk_pos = self.world.world_to_chunk_pos(entity.position.pos)
+
+        chunk = self.chunks[new_chunk_pos]
+
+        if chunk is None:
+            return
+
+        chunk.entities.append(entity)
+
+    def spawn_entity(self, entity) -> None:
+        self.transfer_entity(entity)
