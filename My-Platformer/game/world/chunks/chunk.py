@@ -66,7 +66,7 @@ class Chunk:
         for i, entity in enumerate(self.entities):
             entity.tick_update(world, game_rules)
 
-            if is_out_of_chunk_bounds(entity.position.pos):
+            if self.is_out_of_chunk_bounds(entity.position.pos):
                 entities_to_transfer[i] = entity
 
         if not entities_to_transfer:
