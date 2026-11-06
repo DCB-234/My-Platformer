@@ -39,7 +39,7 @@ class Game:
         mouse_world = self.camera.screen_to_world(mouse_pos)
         mouse_world = tuple(int(num) for num in mouse_world)
 
-        if self.timer >= self.INTERVAL:
+        while self.timer >= self.INTERVAL:
             self._tick(keys, mouse_buttons, mouse_world)
 
             self.timer -= self.INTERVAL

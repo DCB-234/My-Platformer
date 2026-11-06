@@ -77,8 +77,8 @@ class GameRenderer:
 
     def draw_chunk(self, chunk_pos: tuple, chunk) -> None:
         chunk_x, chunk_y = tuple(num * 16 * 32 for num in chunk_pos)
-        for ix, row in enumerate(chunk.blocks):
-            for iy, block in enumerate(row):
+        for iy, row in enumerate(chunk.blocks):
+            for ix, block in enumerate(row):
                 block = chunk.get_block((ix, iy))
                 if block.block_type == BlockType.AIR:
                     continue
@@ -87,7 +87,7 @@ class GameRenderer:
                     self.screen,
                     block.block_type,
                     (
-                        (ix * 32 + chunk_x) - self.camera.x,
-                        (iy * 32 + chunk_y) - self.camera.y
+                        (ix * 32 + chunk_x) - self.camera.pos.x,
+                        (iy * 32 + chunk_y) - self.camera.pos.y
                     )
                 )

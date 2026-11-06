@@ -16,7 +16,7 @@ class World():
     def get_chunk(self, chunk_pos) -> Chunk | None:
         return self.chunk_manager.get_chunk(chunk_pos)
 
-    def get_block(self, block_pos: tuple) -> Block:
+    def get_block(self, block_pos: tuple) -> Block | None:
         chunk = self.get_chunk(self.world_to_chunk_pos(block_pos))
         if chunk is None:
             return None
@@ -94,17 +94,18 @@ class World():
             return False
 
         # Check if floating
-        surrounding_blocks = [(ix+dx, iy+dy) for dx, dy in
-            [(1,0),(0,1),(-1,0),(0,-1)]
-        ]
+        surrounding_blocks = [(ix+dx, iy+dy) for dx, dy in [(1,0),(0,1),(-1,0),(0,-1)]]
 
-        if not any(
-            self.get_block(block_coord).definition.is_solid_cube
-            for block_coord in surrounding_blocks
-        ):
-            return False
+        for block_coord in surrounding_blocks:
+            block = self.get_block(block_coord)
 
-        return True
+            if block is None:
+                continue
+
+            if block.definition.is_solid_cube:
+                return True
+
+        return False
 
     def is_colliding(self, rect_obj) -> bool:
         collisions = self.get_collisions(rect_obj)

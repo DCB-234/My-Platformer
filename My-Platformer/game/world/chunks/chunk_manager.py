@@ -49,14 +49,17 @@ class ChunkManager:
 
         if chunk_pos in self.cached_chunks:
             chunk = self.cached_chunks.pop(chunk_pos)
+
         elif chunk_pos in self.dirty_chunks:
             chunk = self.dirty_chunks.pop(chunk_pos)
+
         else:
             chunk = Chunk(chunk_pos, self.world_seed, self.terrain_generator, self.cave_generator)
+
         self.chunks[chunk_pos] = chunk
 
-    def get_chunk(self, chunk_pos: tuple) -> Chunk:
-        return self.chunks.get(chunk_pos)
+    def get_chunk(self, chunk_pos: tuple) -> Chunk | None:
+        return self.chunks.get(chunk_pos, None)
 
     def chunk_to_world_coord(self, chunk_coord: tuple) -> tuple:
         x, y = chunk_coord
@@ -70,9 +73,9 @@ class ChunkManager:
             chunk.tick(world, game_rules)
 
     def transfer_entity(self, entity) -> None:
-        new_chunk_pos = self.world.world_to_chunk_pos(entity.position.pos)
+        new_chunk_pos = self.world.world_to_chunk_pos(entity.position.world_pos)
 
-        chunk = self.chunks[new_chunk_pos]
+        chunk = self.chunks.get(new_chunk_pos, None)
 
         if chunk is None:
             return
