@@ -1,6 +1,0 @@
-class GameRules:
-    def __init__(self, GRAVITY, RANDOM_TICK_SPEED, GAMEMODE, RENDER_DISTANCE):
-        self.GRAVITY = GRAVITY
-        self.RANDOM_TICK_SPEED = RANDOM_TICK_SPEED
-        self.GAMEMODE = GAMEMODE
-        self.RENDER_DISTANCE = RENDER_DISTANCE
