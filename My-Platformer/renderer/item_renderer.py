@@ -83,5 +83,5 @@ class ItemRenderer:
             text_rect.bottomright = (x + 18, y + 18)
             screen.blit(text, text_rect)
 
-    def render_item_in_world(self) -> None:
+    def render_item_in_world(self, screen, topleft: tuple) -> None:
         ...

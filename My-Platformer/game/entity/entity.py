@@ -84,3 +84,6 @@ class Entity(HelperEntity):
 
     def interpolate_entity(self, partial_tick: float) -> None:
         self.position.interp = self.position.prev.lerp(self.position.pos, partial_tick)
+
+    def draw(self, screen_pos: tuple) -> None:
+        return

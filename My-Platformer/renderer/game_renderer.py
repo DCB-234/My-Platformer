@@ -46,7 +46,7 @@ class GameRenderer:
             self.draw_chunk(chunk_pos, chunk)
 
         # Player
-        position = self.camera.world_to_screen((player.position.pos.x, player.position.pos.y))
+        position = self.camera.world_to_screen(player.position.pos)
         player.draw(self.screen, position)
 
         # Container or hotbar
@@ -76,6 +76,8 @@ class GameRenderer:
         )
 
     def draw_chunk(self, chunk_pos: tuple, chunk) -> None:
+
+        # Draw blocks
         chunk_x, chunk_y = tuple(num * 16 * 32 for num in chunk_pos)
         for iy, row in enumerate(chunk.blocks):
             for ix, block in enumerate(row):
@@ -91,3 +93,7 @@ class GameRenderer:
                         (iy * 32 + chunk_y) - self.camera.pos.y
                     )
                 )
+
+        # Draw entities
+        for entitiy in chunk.get_entities():
+            entitiy.draw(self.camera.world_to_screen(entity.pos))
