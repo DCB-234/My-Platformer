@@ -4,6 +4,7 @@ from game.gamemode import Gamemode
 from game.game_rules import GameRules
 from game.entity.entity_item import EntityItem
 from game.item.item_type import ItemType
+from game.block.block_type import BlockType
 import pygame
 
 class Game:

@@ -8,3 +8,6 @@ class BlockAir(BlockDefinition):
             is_solid_cube = False,
             light_opacity = 0
         )
+
+    def on_block_break(self, block, context) -> None:
+        return

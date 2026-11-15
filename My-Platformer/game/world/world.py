@@ -4,6 +4,7 @@ from game.block.block import Block
 from game.world.block_context import BlockContext
 from game.world.chunks.chunk import Chunk
 from game.world.chunks.chunk_manager import ChunkManager
+from game.helper.block_item_conversion import BlockItemConversion
 import pygame
 import random
 
@@ -12,6 +13,8 @@ class World():
         self.MAX_WORLD_HEIGHT =  256
         self.MIN_WORLD_HEIGHT = -256
         self.chunk_manager = ChunkManager(self, world_seed)
+
+        self.block_item_conversion = BlockItemConversion()
 
     def get_chunk(self, chunk_pos) -> Chunk | None:
         return self.chunk_manager.get_chunk(chunk_pos)
@@ -51,11 +54,12 @@ class World():
             return
         
         relative_coord = self.world_to_local_chunk_coord(pos)
-        chunk.break_block(relative_coord)
+        block_context = self.construct_block_context(pos)
+        chunk.break_block(relative_coord, block_context)
 
     def construct_block_context(self, block_pos: tuple) -> BlockContext:
         x, y = block_pos
-        return BlockContext(world = self, x = x, y = y)
+        return BlockContext(world = self, x = x, y = y, block_item_conversion = self.block_item_conversion)
 
     def tick_random(self) -> None:
         for chunk_pos, chunk in self.chunk_manager.chunks.items():

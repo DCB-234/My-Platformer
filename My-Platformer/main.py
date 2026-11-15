@@ -17,9 +17,6 @@ renderer = GameRenderer(screen, game, world, camera)
 
 running = True
 
-# Implement ability to zoom in or out!
-# Add actual max/min y world boundaries (stop chunk generation there)!
-
 while running:
 
     dt = clock.tick(60) / 1000.0

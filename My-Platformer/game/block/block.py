@@ -11,5 +11,8 @@ class Block:
     def definition(self):
         return BLOCK_DEFINITIONS[self.block_type]
 
-    def tick_random(self, context):
+    def tick_random(self, context) -> None:
         self.definition.tick_random(self, context)
+
+    def on_block_break(self, context) -> None:
+        self.definition.on_block_break(self, context)

@@ -66,10 +66,9 @@ class GameRenderer:
         self.screen.blit(fps_text, (screen_width-80, 5))
 
         # Player coordinates
-        text_player_x = self.DEFAULT_FONT.render(f'X {player.position.pos.x // 32}', True, 'White')
+        text_player_x = self.DEFAULT_FONT.render(f'X {int(player.position.pos.x // 32)}', True, 'White')
+        text_player_y = self.DEFAULT_FONT.render(f'Y {int(player.position.pos.y // 32)}', True, 'White')
         self.screen.blit(text_player_x, (10, 10))
-
-        text_player_y = self.DEFAULT_FONT.render(f'Y {player.position.pos.y // 32}', True, 'White')
         self.screen.blit(text_player_y, (10, 30))
 
         # Mouse cursor

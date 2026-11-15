@@ -86,10 +86,13 @@ class Chunk:
     def get_block(self, pos: tuple) -> Block:
         ix, iy = pos
         if 0 <= ix < self.CHUNK_SIZE and 0 <= iy < self.CHUNK_SIZE:
-            return self.blocks[iy][ix]
+            return self.blocks[int(iy)][int(ix)]
 
-    def break_block(self, pos) -> None:
+    def break_block(self, pos, context) -> None:
         ix, iy = pos
+        block = self.blocks[iy][ix]
+        block.on_block_break(context)
+
         self.blocks[iy][ix] = Block(BlockType.AIR)
         self.is_modified = True
 

@@ -3,7 +3,6 @@ from game.block.block_type import BlockType
 import pathlib
 import pygame
 
-
 class AssetManager:
     def __init__(self):
         BASE_DIR = pathlib.Path(__file__).parents[1]
