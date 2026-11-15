@@ -23,6 +23,7 @@ A 2D Minecraft-like inspired game developed using Python/Pygame. Created as an i
 | Left shift                    | Crouch |
 | 0-9                           | Select item in hotbar |
 | e                             | Open/close inventory |
+| q                             | Drop item from hotbar |
 
 *(Note: Crouching is functional but the animation has not yet been implemented)*
 
