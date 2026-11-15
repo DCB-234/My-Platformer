@@ -2,7 +2,6 @@ from game.world.chunks.chunk import Chunk
 from game.random.perlin_noise import PerlinNoise
 from game.random.cave_generator import CaveGenerator
 from typing import Set
-import random
 
 class ChunkManager:
     def __init__(self, world, world_seed):
@@ -75,7 +74,7 @@ class ChunkManager:
     def transfer_entity(self, entity) -> None:
         new_chunk_pos = self.world.world_to_chunk_pos(entity.position.world_pos)
 
-        chunk = self.chunks.get(new_chunk_pos, None)
+        chunk = self.get_chunk(new_chunk_pos)
 
         if chunk is None:
             return

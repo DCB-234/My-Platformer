@@ -2,8 +2,9 @@ from game.player.entity_player import EntityPlayer
 from game.container.containers.container_inventory import ContainerInventory
 from game.gamemode import Gamemode
 from game.game_rules import GameRules
+from game.entity.entity_item import EntityItem
+from game.item.item_type import ItemType
 import pygame
-import random
 
 class Game:
     def __init__(self, world, camera, world_seed):
@@ -37,7 +38,7 @@ class Game:
 
         mouse_pos = pygame.mouse.get_pos()
         mouse_world = self.camera.screen_to_world(mouse_pos)
-        mouse_world = tuple(int(num) for num in mouse_world)
+        mouse_world.x, mouse_world.y = int(mouse_world.x), int(mouse_world.y)
 
         while self.timer >= self.INTERVAL:
             self._tick(keys, mouse_buttons, mouse_world)
@@ -47,7 +48,7 @@ class Game:
         self.partial_tick = min(1.0, self.timer / self.INTERVAL)
         self.player.interpolate_entity(self.partial_tick)
 
-    def _tick(self, keys, mouse_buttons, mouse_world) -> None:
+    def _tick(self, keys, mouse_buttons, mouse_world: pygame.Vector2) -> None:
         self.tick_player(keys, mouse_buttons, mouse_world)
         self.tick_chunks()
         self.tick_blocks_and_ambience()
@@ -56,7 +57,7 @@ class Game:
         for _ in range(self.game_rules.RANDOM_TICK_SPEED):
             self.world.tick_random()
 
-    def tick_player(self, keys, mouse_buttons, mouse_world) -> None:
+    def tick_player(self, keys, mouse_buttons, mouse_world: pygame.Vector2) -> None:
         self.player.tick_update(self.world, self.game_rules, mouse_world)
         self.handle_player_actions(keys, mouse_buttons, mouse_world)
 
@@ -71,7 +72,7 @@ class Game:
 
         self.world.tick_chunks(self.game_rules)
 
-    def handle_player_actions(self, keys, mouse_buttons, mouse_world) -> None:
+    def handle_player_actions(self, keys, mouse_buttons, mouse_world: pygame.Vector2) -> None:
 
         # Movement
         if keys[pygame.K_w] or keys[pygame.K_UP] or keys[pygame.K_SPACE]:
@@ -146,8 +147,7 @@ class Game:
 
         # Drop item from hotbar
         if keys[pygame.K_q] and not self.previous_keys[pygame.K_q]:
-            print('Dropping item')
-            ...
+            self.player.drop_item_from_hotbar(self.world, mouse_world)
 
         self.previous_keys = keys
         self.previous_mouse_buttons = mouse_buttons

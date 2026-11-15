@@ -72,9 +72,8 @@ class World():
             block_context = self.construct_block_context(world_pos)
             chunk.block_tick_random(rand_coord, block_context)
 
-    def get_coord_from_click(self, mouse_world) -> tuple:
-        mouse_x, mouse_y = mouse_world
-        return (mouse_x // 32, mouse_y // 32)
+    def get_coord_from_click(self, mouse_world: pygame.Vector2) -> tuple:
+        return (int(mouse_world.x // 32), int(mouse_world.y // 32))
 
     def is_valid_block_placement(self, coord: tuple, player_rect) -> bool:
 

@@ -11,6 +11,7 @@ A 2D Minecraft-like inspired game developed using Python/Pygame. Created as an i
 - Breaking and placing blocks
 - Entity system
 - Random block ticking
+- Dropping items
 
 # Controls
 | Control                       | Action |

@@ -28,7 +28,7 @@ class GuiRenderer:
         self.HOTBAR_PNG = GUI_PNG.subsurface(pygame.Rect(0,0,180,20))
         self.HIGHLIGHTED_SLOT_PNG = GUI_PNG.subsurface(pygame.Rect(0,22,24,22))
 
-    def draw_container(self, screen, container) -> None:
+    def draw_container(self, screen, container, asset_manager) -> None:
         container_type = container.container_type
         container_texture = self.CONTAINER_TEXTURES[container_type]
 
@@ -45,9 +45,9 @@ class GuiRenderer:
                 container_rect.bottom+((i//9)*-18-24) if i//9==0 else
                 container_rect.bottom+((i//9)*-18-28)
             )
-            self.item_renderer.render_item_in_container(screen, slot, item_pos)
+            self.item_renderer.render_item_in_container(screen, slot, item_pos, asset_manager)
 
-    def draw_hotbar(self, screen, player) -> None:
+    def draw_hotbar(self, screen, player, asset_manager) -> None:
         container = player.inventory
     
         # draw hotbar
@@ -70,5 +70,6 @@ class GuiRenderer:
             self.item_renderer.render_item_in_container(
                 screen,
                 slot,
-                (i*20+2+hotbar_rect.left, hotbar_rect.top+2)
+                (i*20+2+hotbar_rect.left, hotbar_rect.top+2),
+                asset_manager
             )

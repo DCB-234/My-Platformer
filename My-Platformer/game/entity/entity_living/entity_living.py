@@ -1,14 +1,14 @@
 from game.entity.entity import Entity
+import pygame
 
 class EntityLiving(Entity):
-    def __init__(self, hitbox, start_x:int=0, start_y:int=0, start_speed_x:int=0, start_speed_y:int=0):
-        super().__init__(
-            hitbox=hitbox,
-            start_x=start_x,
-            start_y=start_y,
-            start_speed_x=start_speed_x,
-            start_speed_y=start_speed_y
-        )
+    def __init__(
+        self, 
+        hitbox, 
+        start_pos: pygame.Vector2 = pygame.Vector2(0,0), 
+        start_speed: pygame.Vector2 = pygame.Vector2(0,0)
+    ):
+        super().__init__(hitbox = hitbox, start_pos = start_pos, start_speed = start_speed)
 
         self.walk_time: int = 0
         self.walk_progress: float = 0.0

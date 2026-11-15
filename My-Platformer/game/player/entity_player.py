@@ -8,13 +8,13 @@ from game.container.containers.container_inventory import ContainerInventory
 from game.helper.helper_entity import HelperEntity
 from game.entity.entity_position import EntityPosition
 from game.entity.entity_living.entity_living import EntityLiving
+from game.entity.entity_item import EntityItem
 
 class EntityPlayer(EntityLiving):
     def __init__(self):
         super().__init__(
-            hitbox=pygame.Rect(0, 0, 8, 64),
-            start_x=0,
-            start_y=0,
+            hitbox = pygame.Rect(0, 0, 8, 64),
+            start_pos = pygame.Vector2(0,0)
         )
 
         self.terminal_velocity: int = 50
@@ -27,6 +27,8 @@ class EntityPlayer(EntityLiving):
 
         self.prev_swing_progress: float = 0.0
         self.interp_swing_progress: float = 0.0
+        
+        self.FRICTION = 0.9
 
         self.current_hotbar_slot: int = 0
 
@@ -57,6 +59,7 @@ class EntityPlayer(EntityLiving):
         self.skin = SkinBase(steve_skin)
 
         self.update_physics()
+
 
     def move(self, value: int) -> None:
         if self.is_crouching:
@@ -131,7 +134,7 @@ class EntityPlayer(EntityLiving):
             self.max_walk_progress = 45
         super().update_physics()
 
-    def tick_update(self, world, game_rules, mouse_world) -> None:
+    def tick_update(self, world, game_rules, mouse_world: pygame.Vector2) -> None:
         self.update_walk_progress()
         self.update_arm_swing_progress()
         self.update_head(mouse_world)
@@ -166,11 +169,10 @@ class EntityPlayer(EntityLiving):
             self.position.pos.x = self.hitbox.centerx
             self.position.speed.x = 0
 
-    def update_head(self, mouse_world) -> None:
-        mouse_x, _ = mouse_world
-        if mouse_x < self.position.pos.x:
+    def update_head(self, mouse_world: pygame.Vector2) -> None:
+        if mouse_world.x < self.position.pos.x:
             self.position.direction = -1
-        elif mouse_x > self.position.pos.x:
+        elif mouse_world.x > self.position.pos.x:
             self.position.direction = 1
 
         centerx, y = self.position.pos.x, self.position.pos.y
@@ -202,12 +204,12 @@ class EntityPlayer(EntityLiving):
     def handle_right_click_hold(self, world) -> None:
         ...
 
-    def handle_single_left_click(self, world, mouse_world) -> None:
+    def handle_single_left_click(self, world, mouse_world: pygame.Vector2) -> None:
         # Break block
         coord = world.get_coord_from_click(mouse_world)
         world.break_block(coord)
 
-    def handle_left_click_hold(self, world, mouse_world) -> None:
+    def handle_left_click_hold(self, world, mouse_world: pygame.Vector2) -> None:
         coord = world.get_coord_from_click(mouse_world)
         world.break_block(coord)
 
@@ -219,3 +221,28 @@ class EntityPlayer(EntityLiving):
             self.prev_swing_progress +
             (self.swing_progress - self.prev_swing_progress) * partial_tick
         )
+
+    def drop_item_from_hotbar(self, world, mouse_world: pygame.Vector2) -> None:
+        current_item_stack = self.inventory.slots[self.current_hotbar_slot]
+        if current_item_stack:
+            self.is_swinging = True
+            current_item_stack.stack_size -= 1
+
+            head_pos = pygame.Vector2(self.position.pos.x, self.position.pos.y - 48)
+            direction = mouse_world - head_pos
+            angle_to_mouse = math.radians(direction.angle_to(pygame.Vector2(1,0)))
+            start_speed = pygame.Vector2(
+                7*math.cos(angle_to_mouse),
+                7*math.sin(angle_to_mouse)
+            ) + self.position.speed
+
+            entity_item = EntityItem(
+                item_type = current_item_stack.item_type,
+                start_pos = head_pos,
+                start_speed = start_speed
+            )
+
+            world.spawn_entity(entity_item)
+
+            if current_item_stack.stack_size < 1:
+                self.inventory.slots[self.current_hotbar_slot] = None

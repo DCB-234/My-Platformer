@@ -23,7 +23,6 @@ class Chunk:
 
         chunk_start_x = chunk_x * self.CHUNK_SIZE
         chunk_start_y = chunk_y * self.CHUNK_SIZE
-        chunk_end_y = chunk_start_y + self.CHUNK_SIZE
 
         height_values = [
             terrain_generator.get_terrain_height(chunk_start_x+local_x)
@@ -66,7 +65,7 @@ class Chunk:
         for i, entity in enumerate(self.entities):
             entity.tick_update(world, game_rules)
 
-            if is_out_of_chunk_bounds(entity.position.world_pos):
+            if self.is_out_of_chunk_bounds(entity.position.world_pos):
                 entities_to_transfer[i] = entity
 
         if not entities_to_transfer:

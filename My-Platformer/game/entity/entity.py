@@ -1,13 +1,18 @@
 from game.entity.entity_position import EntityPosition
 from game.helper.helper_entity import HelperEntity
+import math
 import pygame
 
 class Entity(HelperEntity):
-    def __init__(self, hitbox, start_x:int, start_y:int, start_speed_x:int=0, start_speed_y:int=0):
-        self.position = EntityPosition(
-            start_x=start_x, start_y=start_y, start_speed_x=start_speed_x, start_speed_y=start_speed_y
-        )
+    def __init__(
+        self, 
+        hitbox, 
+        start_pos: pygame.Vector2 = pygame.Vector2(0,0), 
+        start_speed: pygame.Vector2 = pygame.Vector2(0,0)
+    ):
+        self.position = EntityPosition(start_pos = start_pos, start_speed = start_speed)
         self.hitbox: pygame.Rect = hitbox
+        self.FRICTION = 0.5
 
     def tick_update(self, world, game_rules) -> None:
         self.apply_physics(world, game_rules)
@@ -72,12 +77,11 @@ class Entity(HelperEntity):
             self.position.is_in_air = True
 
     def determine_friction(self) -> int:
-        if self.position.speed.x < 0:
-            return 1
-        elif self.position.speed.x > 0:
-            return -1
-        elif self.position.speed.x == 0:
-            return 0
+        if self.position.speed.x > 0:
+            return -min(self.FRICTION, self.position.speed.x)
+        elif self.position.speed.x < 0:
+            return min(self.FRICTION, abs(self.position.speed.x))
+        return 0
 
     def update_physics(self) -> None:
         self.hitbox.midbottom = (self.position.pos.x, self.position.pos.y)
@@ -85,5 +89,5 @@ class Entity(HelperEntity):
     def interpolate_entity(self, partial_tick: float) -> None:
         self.position.interp = self.position.prev.lerp(self.position.pos, partial_tick)
 
-    def draw(self, screen_pos: tuple) -> None:
+    def draw(self, screen, midbottom: tuple, asset_manager) -> None:
         return

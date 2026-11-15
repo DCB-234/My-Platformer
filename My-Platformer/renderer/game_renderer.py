@@ -5,6 +5,7 @@ from game.container.container_type import ContainerType
 from renderer.block_renderer import BlockRenderer
 from renderer.gui_renderer import GuiRenderer
 from renderer.item_renderer import ItemRenderer
+from renderer.asset_manager import AssetManager
 
 class GameRenderer:
     def __init__(self, screen, game, world, camera):
@@ -16,6 +17,7 @@ class GameRenderer:
         self.fps = None
 
         self.camera = camera
+        self.asset_manager = AssetManager()
 
         self.block_renderer = BlockRenderer()
         self.item_renderer = ItemRenderer()
@@ -35,15 +37,18 @@ class GameRenderer:
         player = self.game.player
 
         self.camera.update(player, self.screen, dt)
-        
+
         screen_width = self.screen.get_width()
-        screen_height = self.screen.get_height()
 
         self.screen.fill((178, 200, 247))
 
-        # Map
+        # Draw blocks
         for chunk_pos, chunk in self.world.chunk_manager.chunks.items():
-            self.draw_chunk(chunk_pos, chunk)
+            self.draw_chunk_blocks(chunk_pos, chunk)
+
+        # Draw entities
+        for chunk in self.world.chunk_manager.chunks.values():
+            self.draw_chunk_entities(chunk)
 
         # Player
         position = self.camera.world_to_screen(player.position.pos)
@@ -51,20 +56,20 @@ class GameRenderer:
 
         # Container or hotbar
         if self.game.opened_container:
-            self.gui_renderer.draw_container(self.screen, self.game.opened_container)
+            self.gui_renderer.draw_container(self.screen, self.game.opened_container, self.asset_manager)
         else:
-            self.gui_renderer.draw_hotbar(self.screen, player)
+            self.gui_renderer.draw_hotbar(self.screen, player, self.asset_manager)
 
         # FPS text
         fps_text = self.DEFAULT_FONT.render(f'FPS {self.fps}', True, 'White')
         self.screen.blit(fps_text, (screen_width-80, 5))
 
         # Player coordinates
-        player_x = self.DEFAULT_FONT.render(f'X {player.position.pos.x // 32}', True, 'White')
-        self.screen.blit(player_x, (10, 10))
+        text_player_x = self.DEFAULT_FONT.render(f'X {player.position.pos.x // 32}', True, 'White')
+        self.screen.blit(text_player_x, (10, 10))
 
-        player_y = self.DEFAULT_FONT.render(f'Y {player.position.pos.y // 32}', True, 'White')
-        self.screen.blit(player_y, (10, 30))
+        text_player_y = self.DEFAULT_FONT.render(f'Y {player.position.pos.y // 32}', True, 'White')
+        self.screen.blit(text_player_y, (10, 30))
 
         # Mouse cursor
         mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -75,7 +80,7 @@ class GameRenderer:
             )
         )
 
-    def draw_chunk(self, chunk_pos: tuple, chunk) -> None:
+    def draw_chunk_blocks(self, chunk_pos: tuple, chunk) -> None:
 
         # Draw blocks
         chunk_x, chunk_y = tuple(num * 16 * 32 for num in chunk_pos)
@@ -91,9 +96,13 @@ class GameRenderer:
                     (
                         (ix * 32 + chunk_x) - self.camera.pos.x,
                         (iy * 32 + chunk_y) - self.camera.pos.y
-                    )
+                    ),
+                    self.asset_manager
                 )
 
-        # Draw entities
-        for entitiy in chunk.get_entities():
-            entitiy.draw(self.camera.world_to_screen(entity.pos))
+    def draw_chunk_entities(self, chunk) -> None:
+        for entity in chunk.get_entities():
+            entity.draw(self.screen, self.camera.world_to_screen(entity.position.pos), self.asset_manager)
+
+    def render_entity_item(self, midbottom: tuple, item_type: ItemType) -> None:
+        self.item_renderer.render_entity_item(self.screen, midbottom, item_type, self.asset_manager)

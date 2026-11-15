@@ -16,16 +16,16 @@ class Camera:
         self.pos.x += (target_x - self.pos.x) * factor
         self.pos.y += (target_y - self.pos.y) * factor
 
-    def world_to_screen(self, position: tuple) -> tuple:
+    def world_to_screen(self, position: tuple) -> pygame.Vector2:
         pos_x, pos_y = position
-        return (
+        return pygame.Vector2(
             pos_x - self.pos.x,
             pos_y - self.pos.y
         )
 
-    def screen_to_world(self, position: tuple) -> tuple:
+    def screen_to_world(self, position: tuple) -> pygame.Vector2:
         pos_x, pos_y = position
-        return (
+        return pygame.Vector2(
             pos_x + self.pos.x,
             pos_y + self.pos.y
         )
