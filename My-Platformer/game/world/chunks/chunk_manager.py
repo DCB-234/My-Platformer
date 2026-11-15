@@ -83,3 +83,7 @@ class ChunkManager:
 
     def spawn_entity(self, entity) -> None:
         self.transfer_entity(entity)
+
+    def interpolate_entities(self, partial_tick: float) -> None:
+        for chunk in self.chunks.values():
+            chunk.interpolate_entities(partial_tick)

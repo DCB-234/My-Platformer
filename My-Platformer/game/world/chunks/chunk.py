@@ -98,3 +98,7 @@ class Chunk:
 
     def get_entities(self) -> list:
         return self.entities
+
+    def interpolate_entities(self, partial_tick: float) -> None:
+        for entity in self.entities:
+            entity.interpolate(partial_tick)

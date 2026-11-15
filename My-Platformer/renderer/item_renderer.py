@@ -27,9 +27,3 @@ class ItemRenderer:
             text_rect = text.get_rect()
             text_rect.bottomright = (x + 18, y + 18)
             screen.blit(text, text_rect)
-
-    def render_entity_item(self, screen, midbottom: tuple, item_type: ItemType, asset_manager) -> None:
-        item_surface = asset_manager.get_item(item_type)
-        item_surfare_rect = item_surface.get_rect()
-        item_surface_rect.midbottom = midbottom
-        screen.blit(item_surface, item_surface_rect)

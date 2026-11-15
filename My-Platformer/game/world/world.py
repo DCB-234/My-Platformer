@@ -140,3 +140,6 @@ class World():
 
     def spawn_entity(self, entity) -> None:
         self.chunk_manager.spawn_entity(entity)
+
+    def interpolate_entities(self, partial_tick: float) -> None:
+        self.chunk_manager.interpolate_entities(partial_tick)

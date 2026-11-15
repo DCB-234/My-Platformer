@@ -35,8 +35,8 @@ class EntityLiving(Entity):
         self.prev_walk_progress = self.walk_progress
         self.walk_progress = self.walk_time / self.max_walk_time
 
-    def interpolate_entity(self, partial_tick) -> None:
-        super().interpolate_entity(partial_tick)
+    def interpolate(self, partial_tick: float) -> None:
+        super().interpolate(partial_tick)
         # Interpolate walk progress
         self.interp_walk_progress = (
             self.prev_walk_progress + 

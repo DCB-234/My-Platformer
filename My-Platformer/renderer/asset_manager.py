@@ -111,8 +111,8 @@ class AssetManager:
                 pygame.transform.scale(texture, ITEM_SCALE)
             )
 
-    def get_item(self, item_type: ItemType) -> obj | None:
+    def get_item(self, item_type: ItemType) -> pygame.Surface | None:
         return self.ITEMS.get(item_type, None)
 
-    def get_block(self, block_type: BlockType) -> obj | None:
+    def get_block(self, block_type: BlockType) -> pygame.Surface | None:
         return self.BLOCKS.get(block_type, None)

@@ -7,9 +7,9 @@ class EntityPosition:
         start_pos: pygame.Vector2 = pygame.Vector2(0,0), 
         start_speed: pygame.Vector2 = pygame.Vector2(0,0)
     ):
-        self.prev = start_pos
-        self.pos = start_pos
-        self.interp = start_pos
+        self.prev = start_pos.copy()
+        self.pos = start_pos.copy()
+        self.interp = start_pos.copy()
         self.speed = start_speed
         self.direction: int = -1
         self.is_in_air: bool = False

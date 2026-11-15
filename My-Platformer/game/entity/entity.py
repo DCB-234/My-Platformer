@@ -86,7 +86,7 @@ class Entity(HelperEntity):
     def update_physics(self) -> None:
         self.hitbox.midbottom = (self.position.pos.x, self.position.pos.y)
 
-    def interpolate_entity(self, partial_tick: float) -> None:
+    def interpolate(self, partial_tick: float) -> None:
         self.position.interp = self.position.prev.lerp(self.position.pos, partial_tick)
 
     def draw(self, screen, midbottom: tuple, asset_manager) -> None:

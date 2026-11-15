@@ -9,7 +9,7 @@ class EntityItem(Entity):
         start_pos: pygame.Vector2=pygame.Vector2(0,0), 
         start_speed: pygame.Vector2=pygame.Vector2(0,0)
     ):
-        super().__init__(hitbox=pygame.Rect(0,0,8,8), start_pos=start_pos, start_speed=start_speed)
+        super().__init__(hitbox=pygame.Rect(0,0,16,16), start_pos=start_pos, start_speed=start_speed)
         self.item_type = item_type
 
     def tick_update(self, world, game_rules) -> None:

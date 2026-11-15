@@ -46,7 +46,8 @@ class Game:
             self.timer -= self.INTERVAL
 
         self.partial_tick = min(1.0, self.timer / self.INTERVAL)
-        self.player.interpolate_entity(self.partial_tick)
+        self.player.interpolate(self.partial_tick)
+        self.world.interpolate_entities(self.partial_tick)
 
     def _tick(self, keys, mouse_buttons, mouse_world: pygame.Vector2) -> None:
         self.tick_player(keys, mouse_buttons, mouse_world)

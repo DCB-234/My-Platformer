@@ -6,6 +6,7 @@ from renderer.block_renderer import BlockRenderer
 from renderer.gui_renderer import GuiRenderer
 from renderer.item_renderer import ItemRenderer
 from renderer.asset_manager import AssetManager
+from game.item.item_type import ItemType
 
 class GameRenderer:
     def __init__(self, screen, game, world, camera):

@@ -213,8 +213,8 @@ class EntityPlayer(EntityLiving):
         coord = world.get_coord_from_click(mouse_world)
         world.break_block(coord)
 
-    def interpolate_entity(self, partial_tick) -> None:
-        super().interpolate_entity(partial_tick)
+    def interpolate(self, partial_tick) -> None:
+        super().interpolate(partial_tick)
 
         # Interpolate player limb swing
         self.interp_swing_progress = (
