@@ -1,5 +1,6 @@
 from game.block.block_definition import BlockDefinition
 from game.block.block_type import BlockType
+from game.item.item_type import ItemType
 
 class BlockGrass(BlockDefinition):
     def __init__(self):
@@ -11,3 +12,6 @@ class BlockGrass(BlockDefinition):
         if context.above is not None:
             if context.above.definition.can_block_grass:
                 block.block_type = BlockType.DIRT
+
+    def get_drop_item(self, block, context) -> ItemType:
+        return ItemType.DIRT

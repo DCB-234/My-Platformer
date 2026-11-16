@@ -1,4 +1,6 @@
 from game.block.block_definition import BlockDefinition
+from game.item.item_type import ItemType
+import random
 
 class BlockLeaves(BlockDefinition):
     def __init__(self):
@@ -7,3 +9,7 @@ class BlockLeaves(BlockDefinition):
             can_block_grass = False,
             light_opacity = 2
         )
+
+    def get_drop_item(self, block, context) -> ItemType | None:
+        if random.random() < 0.5:
+            return ItemType.STICK

@@ -1,5 +1,4 @@
 import math
-import random
 
 class PerlinNoise:
     def __init__(self, world_seed):

@@ -1,8 +1,8 @@
-import pygame
 from renderer.game_renderer import GameRenderer
 from game.game import Game
 from game.world.world import World
 from renderer.camera import Camera
+import pygame
 
 pygame.init()
 screen = pygame.display.set_mode((640, 480), pygame.RESIZABLE)
