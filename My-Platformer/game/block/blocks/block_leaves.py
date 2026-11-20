@@ -11,5 +11,5 @@ class BlockLeaves(BlockDefinition):
         )
 
     def get_drop_item(self, block, context) -> ItemType | None:
-        if random.random() < 0.5:
+        if random.random() < 0.1:
             return ItemType.STICK

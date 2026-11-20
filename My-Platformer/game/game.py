@@ -2,9 +2,6 @@ from game.player.entity_player import EntityPlayer
 from game.container.containers.container_inventory import ContainerInventory
 from game.gamemode import Gamemode
 from game.game_rules import GameRules
-from game.entity.entity_item import EntityItem
-from game.item.item_type import ItemType
-from game.block.block_type import BlockType
 import pygame
 
 class Game:
@@ -137,7 +134,7 @@ class Game:
 
         if keys[pygame.K_7]:
             self.player.current_hotbar_slot = 6
-        
+
         if keys[pygame.K_8]:
             self.player.current_hotbar_slot = 7
         

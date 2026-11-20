@@ -2,13 +2,10 @@ import pygame
 import math
 import pathlib
 from game.entity.skin_base import SkinBase
-from game.block.block_type import BlockType
 from game.item.item_type import ItemType
 from game.container.containers.container_inventory import ContainerInventory
-from game.helper.helper_entity import HelperEntity
-from game.entity.entity_position import EntityPosition
 from game.entity.entity_living.entity_living import EntityLiving
-from game.entity.entity_item import EntityItem
+from game.entity.entity_item_stack import EntityItemStack
 
 class EntityPlayer(EntityLiving):
     def __init__(self):
@@ -27,7 +24,7 @@ class EntityPlayer(EntityLiving):
 
         self.prev_swing_progress: float = 0.0
         self.interp_swing_progress: float = 0.0
-        
+
         self.FRICTION = 0.9
 
         self.current_hotbar_slot: int = 0
@@ -59,7 +56,6 @@ class EntityPlayer(EntityLiving):
         self.skin = SkinBase(steve_skin)
 
         self.update_physics()
-
 
     def move(self, value: int) -> None:
         if self.is_crouching:
@@ -224,25 +220,28 @@ class EntityPlayer(EntityLiving):
 
     def drop_item_from_hotbar(self, world, mouse_world: pygame.Vector2) -> None:
         current_item_stack = self.inventory.slots[self.current_hotbar_slot]
-        if current_item_stack:
-            self.is_swinging = True
-            current_item_stack.stack_size -= 1
 
-            head_pos = pygame.Vector2(self.position.pos.x, self.position.pos.y - 48)
-            direction = mouse_world - head_pos
-            angle_to_mouse = math.radians(direction.angle_to(pygame.Vector2(1,0)))
-            start_speed = pygame.Vector2(
-                7*math.cos(angle_to_mouse),
-                7*math.sin(angle_to_mouse)
-            ) + self.position.speed
+        if current_item_stack is None:
+            return
 
-            entity_item = EntityItem(
-                item_type = current_item_stack.item_type,
-                start_pos = head_pos,
-                start_speed = start_speed
-            )
+        self.is_swinging = True
+        current_item_stack.stack_size -= 1
 
-            world.spawn_entity(entity_item)
+        head_pos = pygame.Vector2(self.position.pos.x, self.position.pos.y - 48)
+        direction = mouse_world - head_pos
+        angle_to_mouse = math.radians(direction.angle_to(pygame.Vector2(1,0)))
+        start_speed = pygame.Vector2(
+            7*math.cos(angle_to_mouse),
+            7*math.sin(angle_to_mouse)
+        ) + self.position.speed
 
-            if current_item_stack.stack_size < 1:
-                self.inventory.slots[self.current_hotbar_slot] = None
+        entity_item_stack = EntityItemStack(
+            item_type = current_item_stack.item_type,
+            start_pos = head_pos,
+            start_speed = start_speed
+        )
+
+        world.spawn_entity(entity_item_stack)
+
+        if current_item_stack.stack_size < 1:
+            self.inventory.slots[self.current_hotbar_slot] = None

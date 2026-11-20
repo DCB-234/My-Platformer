@@ -1,4 +1,4 @@
-from game.entity.entity_item import EntityItem
+from game.entity.entity_item_stack import EntityItemStack
 from dataclasses import dataclass
 import pygame
 import random
@@ -23,9 +23,9 @@ class BlockDefinition:
             return
 
         block_pos = pygame.Vector2(context.world_to_pixel_coord(context.world_pos))
-        entity_item = EntityItem(
+        entity_item_stack = EntityItemStack(
             item_type = item_type,
             start_pos = pygame.Vector2(block_pos.x + 16, block_pos.y + 16),
-            start_speed = pygame.Vector2(random.randint(-3,3), -5)
+            start_speed = pygame.Vector2(random.randint(-3,3), 10)
         )
-        context.world.spawn_entity(entity_item)
+        context.world.spawn_entity(entity_item_stack)
