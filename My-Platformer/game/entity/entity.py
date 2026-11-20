@@ -1,6 +1,5 @@
 from game.entity.entity_position import EntityPosition
 from game.helper.helper_entity import HelperEntity
-import math
 import pygame
 
 class Entity(HelperEntity):
@@ -13,6 +12,8 @@ class Entity(HelperEntity):
         self.position = EntityPosition(start_pos = start_pos, start_speed = start_speed)
         self.hitbox: pygame.Rect = hitbox
         self.FRICTION = 0.5
+
+        self.needs_removal: bool = False
 
     def tick_update(self, world, game_rules) -> None:
         self.apply_physics(world, game_rules)

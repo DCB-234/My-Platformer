@@ -1,5 +1,6 @@
 from game.entity.entity import Entity
 from game.item.item_type import ItemType
+import time
 import pygame
 
 class EntityItemStack(Entity):
@@ -12,9 +13,14 @@ class EntityItemStack(Entity):
     ):
         super().__init__(hitbox=pygame.Rect(0,0,16,16), start_pos=start_pos, start_speed=start_speed)
         self.item_type = item_type
+        self.spawn_time = time.time()
 
     def tick_update(self, world, game_rules) -> None:
         super().tick_update(world, game_rules)
+
+        if time.time() - self.spawn_time > 300:
+            self.needs_removal = True
+
         # check proximity with player to get picked up
 
     def draw(self, screen, midbottom: tuple, asset_manager) -> None:

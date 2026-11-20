@@ -1,4 +1,5 @@
 from game.entity.entity_item_stack import EntityItemStack
+from game.item.item_type import ItemType
 from dataclasses import dataclass
 import pygame
 import random

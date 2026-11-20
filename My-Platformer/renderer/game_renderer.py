@@ -102,7 +102,7 @@ class GameRenderer:
 
     def draw_chunk_entities(self, chunk) -> None:
         for entity in chunk.get_entities():
-            entity.draw(self.screen, self.camera.world_to_screen(entity.position.pos), self.asset_manager)
+            entity.draw(self.screen, self.camera.world_to_screen(entity.position.interp), self.asset_manager)
 
     def render_entity_item(self, midbottom: tuple, item_type: ItemType) -> None:
         self.item_renderer.render_entity_item(self.screen, midbottom, item_type, self.asset_manager)
