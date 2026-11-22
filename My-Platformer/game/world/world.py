@@ -147,3 +147,6 @@ class World():
 
     def interpolate_entities(self, partial_tick: float) -> None:
         self.chunk_manager.interpolate_entities(partial_tick)
+
+    def get_entities_in_radius(self, pos: pygame.Vector2, radius: int) -> list:
+        return self.chunk_manager.get_entities_in_radius(pos, radius)

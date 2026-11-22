@@ -2,6 +2,8 @@ from game.world.chunks.chunk import Chunk
 from game.random.perlin_noise import PerlinNoise
 from game.random.cave_generator import CaveGenerator
 from typing import Set
+import pygame
+import math
 
 class ChunkManager:
     def __init__(self, world, world_seed):
@@ -90,3 +92,48 @@ class ChunkManager:
     def interpolate_entities(self, partial_tick: float) -> None:
         for chunk in self.chunks.values():
             chunk.interpolate_entities(partial_tick)
+
+    def get_chunks_in_radius(self, start_pos: pygame.Vector2, radius: int) -> list[Chunk]:
+        CHUNK_SIZE = 16
+        BLOCK_SIZE = 32
+        CHUNK_PIXELS = CHUNK_SIZE * BLOCK_SIZE
+
+        chunk_radius = math.ceil(radius / CHUNK_PIXELS) + 1
+
+        start_chunk_x = math.floor(start_pos.x / CHUNK_PIXELS)
+        start_chunk_y = math.floor(start_pos.y / CHUNK_PIXELS)
+
+        chunks = []
+
+        for x in range(start_chunk_x - chunk_radius, start_chunk_x + chunk_radius + 1):
+            for y in range(start_chunk_y - chunk_radius, start_chunk_y + chunk_radius + 1):
+                left = x * CHUNK_PIXELS
+                right = left + CHUNK_PIXELS
+                top = y * CHUNK_PIXELS
+                bottom = top + CHUNK_PIXELS
+
+                closest_x = max(left, min(start_pos.x, right))
+                closest_y = max(top, min(start_pos.y, bottom))
+
+                dx = start_pos.x - closest_x
+                dy = start_pos.y - closest_y
+
+                if dx ** 2 + dy ** 2 <= radius ** 2:
+                    chunk = self.get_chunk((x,y))
+                    if chunk is not None:
+                        chunks.append(chunk)
+
+        return chunks
+
+    def get_entities_in_radius(self, start_pos: pygame.Vector2, radius: int) -> list:
+        chunks = self.get_chunks_in_radius(start_pos, radius)
+
+        entities = []
+
+        for chunk in chunks:
+            for entity in chunk.get_entities():
+
+                if entity.position.pos.distance_to(start_pos) <= radius:
+                    entities.append(entity)
+
+        return entities
