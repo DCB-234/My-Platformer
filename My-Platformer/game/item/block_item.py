@@ -3,8 +3,8 @@ from game.item.item_definition import ItemDefinition
 from game.block.block_type import BlockType
 
 class BlockItem(ItemDefinition):
-    def __init__(self, block_type: BlockType):
-        super().__init__()
+    def __init__(self, block_type: BlockType, MAX_STACK_SIZE: int = 64):
+        super().__init__(MAX_STACK_SIZE = MAX_STACK_SIZE)
         self.block_type: BlockType = block_type
         self.is_placeable = True
 

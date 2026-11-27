@@ -7,6 +7,7 @@ import pygame
 class Game:
     def __init__(self, world, camera, world_seed):
         self.world = world
+
         self.player = EntityPlayer()
 
         self.timer: float = 0.0
@@ -29,6 +30,7 @@ class Game:
         self.world_seed: int = world_seed
 
         self.world.chunk_manager.update_chunks(self.player_chunk, self.game_rules.RENDER_DISTANCE)
+        self.world.spawn_entity(self.player)
 
     def progress(self, keys, mouse_buttons, dt) -> None:
 
@@ -44,7 +46,6 @@ class Game:
             self.timer -= self.INTERVAL
 
         self.partial_tick = min(1.0, self.timer / self.INTERVAL)
-        self.player.interpolate(self.partial_tick)
         self.world.interpolate_entities(self.partial_tick)
 
     def _tick(self, keys, mouse_buttons, mouse_world: pygame.Vector2) -> None:
@@ -57,7 +58,7 @@ class Game:
             self.world.tick_random()
 
     def tick_player(self, keys, mouse_buttons, mouse_world: pygame.Vector2) -> None:
-        self.player.tick_update(self.world, self.game_rules, mouse_world)
+        self.player.update_head(mouse_world)
         self.handle_player_actions(keys, mouse_buttons, mouse_world)
 
     def tick_chunks(self) -> None:

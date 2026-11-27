@@ -51,10 +51,6 @@ class GameRenderer:
         for chunk in self.world.chunk_manager.chunks.values():
             self.draw_chunk_entities(chunk)
 
-        # Player
-        position = self.camera.world_to_screen(player.position.pos)
-        player.draw(self.screen, position)
-
         # Container or hotbar
         if self.game.opened_container:
             self.gui_renderer.draw_container(self.screen, self.game.opened_container, self.asset_manager)

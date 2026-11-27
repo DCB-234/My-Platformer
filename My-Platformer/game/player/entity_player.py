@@ -14,7 +14,6 @@ class EntityPlayer(EntityLiving):
             start_pos = pygame.Vector2(0,0)
         )
 
-        self.terminal_velocity: int = 50
         self.is_crouching: bool = False
         self.head_angle: float = 0
 
@@ -74,8 +73,8 @@ class EntityPlayer(EntityLiving):
             self.position.is_in_air = True
             self.position.speed.y = 14
 
-    def draw(self, screen, position) -> None:
-        centerx, y = position
+    def draw(self, screen, midbottom: tuple, asset_manager) -> None:
+        centerx, y = midbottom
         facing = self.position.direction
         back_side = -facing
 
@@ -130,10 +129,9 @@ class EntityPlayer(EntityLiving):
             self.max_walk_progress = 45
         super().update_physics()
 
-    def tick_update(self, world, game_rules, mouse_world: pygame.Vector2) -> None:
+    def tick_update(self, world, game_rules) -> None:
         self.update_walk_progress()
         self.update_arm_swing_progress()
-        self.update_head(mouse_world)
 
         # Apply physics
         self.position.prev.x = self.position.pos.x

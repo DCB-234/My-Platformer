@@ -30,7 +30,7 @@ class Inventory:
 
         # Find if same item type already exists
         for slot in self.slots:
-            if not slot:
+            if slot is None:
                 continue
 
             if slot.item_type == item_type and not slot.is_full():
@@ -40,7 +40,7 @@ class Inventory:
 
         # Choose first available empty slot
         for i, slot in enumerate(self.slots):
-            if not slot:
+            if slot is None:
                 self.create_new_stack(amount, item_type, i)
                 return 0
 

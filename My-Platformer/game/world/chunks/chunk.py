@@ -73,10 +73,7 @@ class Chunk:
 
         self.entities = [
             entity for i, entity in enumerate(self.entities) if i not in entities_to_transfer.keys()
-        ]
-
-        self.entities = [
-            entity for entity in self.entities if not entity.needs_removal
+            and not entity.needs_removal
         ]
 
         for entity in entities_to_transfer.values():

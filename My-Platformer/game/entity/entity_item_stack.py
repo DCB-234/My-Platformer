@@ -1,12 +1,11 @@
 from game.entity.entity import Entity
 from game.item.item_type import ItemType
+from game.item.item_registry import ITEM_DEFINITIONS
 import time
 import pygame
 import math
 
 class EntityItemStack(Entity):
-    MAX_STACK_SIZE = 64
-
     def __init__(
         self,
         item_type: ItemType,
@@ -25,6 +24,8 @@ class EntityItemStack(Entity):
         self.prev_anim_progress: float = 0.0
         self.interp_anim_progress: float = 0.0
 
+        self.MAX_STACK_SIZE: int = ITEM_DEFINITIONS[self.item_type].MAX_STACK_SIZE
+
     def tick_update(self, world, game_rules) -> None:
         if time.time() - self.spawn_time > 300.0 or self.stack_size <= 0:
             self.needs_removal = True
@@ -36,7 +37,10 @@ class EntityItemStack(Entity):
         if time.time() - self.spawn_time < 5.0:
             return
 
-        SEARCH_RADIUS = 32
+        if self.stack_size >= self.MAX_STACK_SIZE:
+            return
+
+        SEARCH_RADIUS = 25
         near_entities = world.get_entities_in_radius(self.position.pos, SEARCH_RADIUS)
 
         if near_entities is None:
@@ -46,22 +50,24 @@ class EntityItemStack(Entity):
             if entity == self:
                 continue
 
-            if isinstance(entity, EntityItemStack) and self.stack_size <= self.MAX_STACK_SIZE:
+            if (
+                isinstance(entity, EntityItemStack)
+                and self.item_type == entity.item_type
+            ):
                 self.attempt_combine_entity_item_stack(entity)
-
-        # check proximity with player to get picked up
 
     def attempt_combine_entity_item_stack(self, entity_item_stack) -> None:
 
         if time.time() - entity_item_stack.spawn_time < 5.0:
             return
 
-        new_stack_size = min(self.stack_size + entity_item_stack.stack_size, 64)
+        new_stack_size = min(self.stack_size + entity_item_stack.stack_size, self.MAX_STACK_SIZE)
 
         d_stack_size = new_stack_size - self.stack_size
         entity_item_stack.stack_size -= d_stack_size
 
         self.stack_size = new_stack_size
+        self.position.pos = self.position.pos.lerp(entity_item_stack.position.pos, 0.5)
 
     def update_anim_progress(self) -> None:
         self.anim_time += 1
@@ -75,7 +81,10 @@ class EntityItemStack(Entity):
     def interpolate(self, partial_tick: float) -> None:
         super().interpolate(partial_tick)
 
-        self.interp_anim_progress = pygame.math.lerp(self.prev_anim_progress, self.anim_progress, partial_tick)
+        if self.anim_time == 0:
+            self.interp_anim_progress = 0.0
+        else:
+            self.interp_anim_progress = pygame.math.lerp(self.prev_anim_progress, self.anim_progress, partial_tick)
 
         self.position.interp.y -= 4 + 8 * ((math.sin(self.interp_anim_progress * math.pi * 2) + 1) / 2)
 

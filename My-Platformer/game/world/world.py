@@ -1,5 +1,4 @@
 from game.block.block_type import BlockType
-from game.block.block_registry import BLOCK_DEFINITIONS
 from game.block.block import Block
 from game.world.block_context import BlockContext
 from game.world.chunks.chunk import Chunk
